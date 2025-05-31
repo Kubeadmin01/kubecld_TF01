@@ -11,8 +11,11 @@ terraform {
     container_name       = "tfstatelock"           # Can be passed via `-backend-config=`"container_name=<container name>"` in the `init` command.
     key                  = "dev.terraform.tfstate" # Can be passed via `-backend-config=`"key=<blob key name>"` in the `init` command.
   }
-
   required_version = ">=1.10.0"
+}
+
+provider "azurerm" {
+  features {}
 }
 
 
