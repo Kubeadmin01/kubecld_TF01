@@ -10,6 +10,10 @@ variable "environment" {
 variable "network_config" {
   type = tuple([string, string, string, string, string, string, string, number])
 }
-variable "azurerm_subnet_name" {
-  type = list(string)
+
+variable "subnets" {
+  description = "Map of subnet names to network_config index"
+  type = map(object({
+    index = number
+  }))
 }

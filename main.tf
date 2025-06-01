@@ -19,8 +19,6 @@ provider "azurerm" {
   subscription_id = "112c2c32-7cd1-45a4-bd96-b189e04d35c3"
 }
 
-
-
 resource "azurerm_resource_group" "RG" {
   name     = "${var.environment}_tf01"
   location = var.allowed_locations[0]
@@ -30,10 +28,11 @@ module "VNET" {
   source                  = "./modules/VNET"
   resource_group_name     = azurerm_resource_group.RG.name
   resource_group_location = azurerm_resource_group.RG.location
-  azurerm_subnet_name     = var.azurerm_subnet_name
   environment             = var.environment
   network_config          = var.network_config
-  
+  subnets = {
+    pesn = { index = 6 }
+  }
 }
 
 module "Storageaccount" {

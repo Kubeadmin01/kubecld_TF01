@@ -13,9 +13,7 @@ variable "allowed_locations" {
 variable "network_config" {
   type = tuple([string, string, string, string, string, string, string, number])
 }
-variable "azurerm_subnet_name" {
-  type = list(string)
-}
+
 
 
 variable "random_prefix" {

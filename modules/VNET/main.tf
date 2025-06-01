@@ -6,23 +6,23 @@ resource "azurerm_virtual_network" "vnet" {
 }
 
 
-resource "azurerm_subnet" "pesn_subnet" {
-  name                 = "${var.environment}_${var.azurerm_subnet_name[5]}"
+resource "azurerm_subnet" "subnets" {
+  for_each             = var.subnets
+  name                 = each.key
   resource_group_name  = var.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["${element(var.network_config, 6)}/${element(var.network_config, 7)}"]
-  
+  address_prefixes     = ["${var.network_config[each.value.index]}/${var.network_config[7]}"]
 }
 
 resource "azurerm_network_security_group" "pesn_nsg" {
-  name                = "${azurerm_subnet.pesn_subnet.name}-nsg"
+  name                = "${azurerm_subnet.subnets["pesn"].name}-nsg"
   location            = var.resource_group_location
   resource_group_name = var.resource_group_name
 
 }
 
 resource "azurerm_subnet_network_security_group_association" "pesn_nsg_association" {
-  subnet_id                 = azurerm_subnet.pesn_subnet.id
+  subnet_id                 = azurerm_subnet.subnets["pesn"].id
   network_security_group_id = azurerm_network_security_group.pesn_nsg.id
   depends_on                = [azurerm_network_security_group.pesn_nsg]
 }
@@ -41,7 +41,7 @@ resource "azurerm_network_security_rule" "pesn_nsg_rule_inbound" {
   source_address_prefix       = "*"
   destination_address_prefix  = "*"
   resource_group_name         = var.resource_group_name
-  network_security_group_name = azurerm_network_security_group.pesn_nsg.id
+  network_security_group_name = azurerm_network_security_group.pesn_nsg.name
   depends_on                  = [azurerm_network_security_group.pesn_nsg]
 }
 

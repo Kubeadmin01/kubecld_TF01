@@ -24,6 +24,6 @@ output "virtual_network_name" {
 }
 output "pesn_subnet_id" {
   description = "The id of the private endpoint subnet"
-  value       = azurerm_subnet.pesn_subnet.id
+  value       = azurerm_subnet.subnets["pesn"].id
 }
 

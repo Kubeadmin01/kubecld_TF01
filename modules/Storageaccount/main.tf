@@ -3,14 +3,16 @@
 
 
 
-resource "random_pet" "prefix" {
-  prefix = var.random_prefix
-  length = 3
+resource "random_string" "prefix" {
+  length  = 8
+  upper   = false
+  special = false
+  numeric = true
 }
 
 
 resource "azurerm_storage_account" "SA" {
-  name                     = "${random_pet.prefix.id}-sa"
+  name                     = "${random_string.prefix.id}sa"
   resource_group_name      = var.resource_group_name
   location                 = var.resource_group_location
   account_tier             = "Standard"
