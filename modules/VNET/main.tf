@@ -31,7 +31,7 @@ resource "azurerm_subnet_network_security_group_association" "pesn_nsg_associati
 
 resource "azurerm_network_security_rule" "pesn_nsg_rule_inbound" {
   for_each                    = local.pesn_inbound_ports_map
-  name                        = "pesn-rule-inbound"
+  name                        = "pesn-rule-inbound-${each.key}"
   priority                    = each.key
   direction                   = "Inbound"
   access                      = "Allow"
@@ -47,7 +47,7 @@ resource "azurerm_network_security_rule" "pesn_nsg_rule_inbound" {
 
 resource "azurerm_network_security_rule" "pesn_nsg_rule_outbound" {
   for_each                    = local.pesn_inbound_ports_map
-  name                        = "pesn-rule-outbound"
+  name                        = "pesn-rule-outbound-${each.key}"
   priority                    = each.key
   direction                   = "Outbound"
   access                      = "Allow"
