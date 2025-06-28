@@ -17,9 +17,8 @@ variable "root_tags" {
   description = "Tags to be applied to the root resource"
   default     = {}
 }
-variable "effect" {
+variable "management_group_id" {
   type        = string
-  description = "The effect to be used (e.g., AuditIfNotExists)"
-  default     = "AuditIfNotExists"
+  description = "The ID of the management group"
 }
 

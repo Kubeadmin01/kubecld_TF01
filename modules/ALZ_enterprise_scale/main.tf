@@ -24,16 +24,28 @@ module "enterprise_scale" {
 
   default_location = var.default_location
 
-  providers = {
-    azurerm              = azurerm
-    azurerm.connectivity = azurerm.connectivity
-    azurerm.management   = azurerm.management
-  }
-
   root_parent_id = data.azurerm_client_config.core.tenant_id
   root_id        = var.root_id
   root_name      = var.root_name
 
   deploy_connectivity_resources = true
   subscription_id_connectivity  = data.azurerm_client_config.core.subscription_id
+
+  providers = {
+    azurerm              = azurerm
+    azurerm.connectivity = azurerm.connectivity
+    azurerm.management   = azurerm.management
+  }
+}
+resource "azurerm_policy_assignment" "enforce_encryption_cmk" {
+  name                 = "Enforce-Encryption-CMK"
+  display_name         = "Enforce Encryption using CMK"
+  policy_definition_id = azurerm_policy_set_definition.enforce_encryption_cmk.id
+  scope                = var.management_group_id
+
+  parameters = jsonencode({
+    effect = {
+      value = "AuditIfNotExists" # or "Disabled" based on your requirement
+    }
+  })
 }
